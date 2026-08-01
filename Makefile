@@ -75,18 +75,12 @@ compile:
 	@echo "------------------------------------"
 	@echo "Compiling QGIS 4 plugin sources"
 	@echo "------------------------------------"
-	@if command -v pyrcc5 >/dev/null 2>&1; then \
-		pyrcc5 -o resources.py resources.qrc; \
-	elif command -v pyrcc >/dev/null 2>&1; then \
-		pyrcc -o resources.py resources.qrc; \
-	elif python3 -c "import importlib.util, sys; spec = importlib.util.find_spec('PyQt5.pyrcc_main'); sys.exit(0 if spec else 1)" >/dev/null 2>&1; then \
-		python3 -m PyQt5.pyrcc_main -o resources.py resources.qrc; \
-	elif python3 -c "import importlib.util, sys; spec = importlib.util.find_spec('PyQt6.pyrcc_main'); sys.exit(0 if spec else 1)" >/dev/null 2>&1; then \
-		python3 -m PyQt6.pyrcc_main -o resources.py resources.qrc; \
+	@if command -v pyside6-rcc >/dev/null 2>&1; then \
+		pyside6-rcc -o resources.py resources.qrc; \
 	else \
-		echo "QGIS 4 compile note: no Qt resource compiler available (pyrcc5/pyrcc or PyQt5/6 pyrcc_main)."; \
+		echo "QGIS 4 compile note: no Qt resource compiler available (pyside6-rcc)."; \
 	fi
-	@python3 -m compileall __init__.py bigquery_layers.py bigquery_layers_dockwidget.py background_tasks.py
+	@/Applications/QGIS-final-4_2_0.app/Contents/MacOS/python -m compileall __init__.py bigquery_layers.py bigquery_layers_dockwidget.py background_tasks.py
 
 %.qm : %.ts
 	$(LRELEASE) $<
