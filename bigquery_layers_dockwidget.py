@@ -25,12 +25,10 @@
 import os, shutil, subprocess, sys
 from queue import Queue
 
-from PyQt5 import QtGui, QtWidgets, uic
-from PyQt5.QtCore import pyqtSignal
+from qgis.PyQt import uic
+from qgis.PyQt.QtWidgets import QDockWidget, QProgressBar
+from qgis.PyQt.QtCore import pyqtSignal, QDate, QTime, QDateTime, Qt, pyqtSlot
 from qgis.core import QgsCoordinateReferenceSystem, QgsCoordinateTransform, QgsProject, QgsMessageLog, Qgis, QgsTask, QgsApplication, QgsDataSourceUri
-from PyQt5.QtCore import QDate, QTime, QDateTime, Qt, pyqtSlot
-from qgis.PyQt.QtWidgets import QProgressBar
-from qgis.PyQt.QtCore import *
 
 sys.path = [os.path.join(os.path.dirname(__file__), 'libs')] + sys.path
 from google.cloud import bigquery
@@ -41,7 +39,7 @@ FORM_CLASS, _ = uic.loadUiType(os.path.join(
     os.path.dirname(__file__), 'bigquery_layers_dockwidget_base.ui'))
 
 
-class BigQueryLayersDockWidget(QtWidgets.QDockWidget, FORM_CLASS):
+class BigQueryLayersDockWidget(QDockWidget, FORM_CLASS):
 
     closingPlugin = pyqtSignal()
 

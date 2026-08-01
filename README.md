@@ -13,7 +13,7 @@ This plugin requires an active (free tier or paid) subscription to Google Cloud 
 1. Make sure you have an active GCP project and authenticated Google Cloud SDK
 2. Clone this repo and symlink it to the QGIS plugins folder
 
-*  Mac: `ln -s ${PWD} ~/Library/"Application Support"/QGIS/QGIS3/profiles/default/python/plugins`
+*  Mac: `ln -s ${PWD} ~/Library/"Application Support"/QGIS/QGIS4/profiles/default/python/plugins`
 
 
 ## Updating bundled BigQuery libs

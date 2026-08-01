@@ -14,7 +14,7 @@ __copyright__ = 'Copyright 2018, Stefan Mandaric'
 
 import unittest
 
-from PyQt5.QtGui import QDockWidget
+from qgis.PyQt.QtWidgets import QDockWidget
 
 from bigquery_layers_dockwidget import BigQueryLayersDockWidget
 

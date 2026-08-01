@@ -8,9 +8,9 @@
 
 [general]
 name=BigQuery Layers
-qgisMinimumVersion=3.0
-description=Import data from BigQuery. 
-version=0.2.1
+qgisMinimumVersion=4.0
+description=Import data from BigQuery.
+version=0.3.0
 author=Stefan Mandaric
 email=stefan.mandaric@gmail.com
 
@@ -23,7 +23,11 @@ repository=https://github.com/smandaric/bigquerylayers
 # Recommended items:
 
 # Uncomment the following line and add your changelog:
-changelog=0.2.1 2019-12-01
+changelog=0.3.0 2026-08-01
+    * Compatibility update for QGIS 4.0 and modern qgis.PyQt imports
+    * Replaced legacy database-menu hooks with generic plugin menu hooks
+    * Updated test harness to use the current QGIS project layer registry model
+    0.2.1 2019-12-01
     * Bugfix: Handle missing ogr2ogr binary
     0.2.0 2019-10-18
     * New feature: Long running result fetching can be cancelled in GUI

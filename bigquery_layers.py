@@ -22,9 +22,9 @@
  *                                                                         *
  ***************************************************************************/
 """
-from PyQt5.QtCore import QSettings, QTranslator, qVersion, QCoreApplication, Qt
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QAction
+from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication, Qt
+from qgis.PyQt.QtGui import QIcon
+from qgis.PyQt.QtWidgets import QAction
 # Initialize Qt resources from file resources.py
 from .resources import *
 
@@ -50,7 +50,12 @@ class BigQueryLayers:
         self.plugin_dir = os.path.dirname(__file__)
 
         # initialize locale
-        locale = QSettings().value('locale/userLocale')[0:2]
+        locale = QSettings().value('locale/userLocale', '')
+        if isinstance(locale, str) and locale:
+            locale = locale[0:2]
+        else:
+            locale = 'en'
+
         locale_path = os.path.join(
             self.plugin_dir,
             'i18n',
@@ -59,9 +64,7 @@ class BigQueryLayers:
         if os.path.exists(locale_path):
             self.translator = QTranslator()
             self.translator.load(locale_path)
-
-            if qVersion() > '4.3.3':
-                QCoreApplication.installTranslator(self.translator)
+            QCoreApplication.installTranslator(self.translator)
 
         # Declare instance attributes
         self.actions = []
@@ -154,13 +157,13 @@ class BigQueryLayers:
             action.setWhatsThis(whats_this)
 
         if add_to_toolbar:
-            #self.toolbar.addAction(action)
             self.iface.addToolBarIcon(action)
 
         if add_to_menu:
-            self.iface.addPluginToDatabaseMenu(
-                self.menu,
-                action)
+            if hasattr(self.iface, 'addPluginToMenu'):
+                self.iface.addPluginToMenu(self.menu, action)
+            elif hasattr(self.iface, 'addPluginMenu'):
+                self.iface.addPluginMenu(self.menu, action)
 
         self.actions.append(action)
 
@@ -205,12 +208,21 @@ class BigQueryLayers:
         #print "** UNLOAD BigQueryLayers"
 
         for action in self.actions:
-            self.iface.removePluginDatabaseMenu(
-                self.tr(u'&BigQuery Layers'),
-                action)
-            self.iface.removeToolBarIcon(action)
-        # remove the toolbar
-        del self.toolbar
+            if hasattr(self.iface, 'removePluginMenu'):
+                self.iface.removePluginMenu(
+                    self.tr(u'&BigQuery Layers'),
+                    action)
+            elif hasattr(self.iface, 'removePluginDatabaseMenu'):
+                self.iface.removePluginDatabaseMenu(
+                    self.tr(u'&BigQuery Layers'),
+                    action)
+            if hasattr(self.iface, 'removeToolBarIcon'):
+                self.iface.removeToolBarIcon(action)
+
+        if hasattr(self, 'toolbar') and self.toolbar is not None:
+            if hasattr(self.iface, 'mainWindow') and self.iface.mainWindow() is not None:
+                self.iface.mainWindow().removeToolBar(self.toolbar)
+            self.toolbar = None
 
     #--------------------------------------------------------------------------
 
