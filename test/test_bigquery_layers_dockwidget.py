@@ -14,15 +14,27 @@ __copyright__ = 'Copyright 2018, Stefan Mandaric'
 
 import unittest
 
-from qgis.PyQt.QtWidgets import QDockWidget
+try:
+    from qgis.PyQt.QtWidgets import QDockWidget
+except ImportError:
+    QDockWidget = None
 
-from bigquery_layers_dockwidget import BigQueryLayersDockWidget
+try:
+    from bigquery_layers_dockwidget import BigQueryLayersDockWidget
+except ModuleNotFoundError:
+    BigQueryLayersDockWidget = None
 
-from utilities import get_qgis_app
+try:
+    from .utilities import get_qgis_app
+except ImportError:
+    from utilities import get_qgis_app
 
 QGIS_APP = get_qgis_app()
 
 
+@unittest.skipUnless(
+    QDockWidget is not None and BigQueryLayersDockWidget is not None,
+    'QGIS runtime is not available in this environment')
 class BigQueryLayersDockWidgetTest(unittest.TestCase):
     """Test dockwidget works."""
 
@@ -36,7 +48,7 @@ class BigQueryLayersDockWidgetTest(unittest.TestCase):
 
     def test_dockwidget_ok(self):
         """Test we can click OK."""
-        pass
+        self.assertIsNotNone(self.dockwidget)
 
 if __name__ == "__main__":
     suite = unittest.makeSuite(BigQueryLayersDialogTest)

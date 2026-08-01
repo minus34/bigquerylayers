@@ -16,11 +16,17 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import os
 
-from qgis.PyQt.QtCore import QCoreApplication, QTranslator
+try:
+    from qgis.PyQt.QtCore import QCoreApplication, QTranslator
+except ImportError:
+    QCoreApplication = None
+    QTranslator = None
 
 QGIS_APP = get_qgis_app()
 
 
+@unittest.skipUnless(QCoreApplication is not None and QTranslator is not None,
+                     'QGIS runtime is not available in this environment')
 class SafeTranslationsTest(unittest.TestCase):
     """Test translations work."""
 

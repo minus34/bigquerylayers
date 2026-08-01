@@ -64,10 +64,17 @@ class BigQueryLayersDockWidget(QDockWidget, FORM_CLASS):
     def _authenticate_with_browser(self):
         """Launch the Google Cloud SDK browser login flow for ADC."""
         try:
-            self.iface.messageBar().pushMessage(
-                'BigQuery Layers',
-                'Opening browser-based Google Cloud authentication. Complete the browser flow and retry the query.',
-                level=Qgis.Info)
+            if self.iface is not None and hasattr(self.iface, 'messageBar'):
+                self.iface.messageBar().pushMessage(
+                    'BigQuery Layers',
+                    'Opening browser-based Google Cloud authentication. Complete the browser flow and retry the query.',
+                    level=Qgis.Info)
+            else:
+                QgsMessageLog.logMessage(
+                    'Opening browser-based Google Cloud authentication. Complete the browser flow and retry the query.',
+                    'BigQuery Layers',
+                    Qgis.Info)
+
             completed = subprocess.run(
                 ['gcloud', 'auth', 'application-default', 'login', '--launch-browser'],
                 stdout=subprocess.PIPE,
@@ -79,16 +86,19 @@ class BigQueryLayersDockWidget(QDockWidget, FORM_CLASS):
                 return True
 
             stderr_text = (completed.stderr or completed.stdout or '').strip()
-            self.iface.messageBar().pushMessage(
-                'BigQuery Layers',
-                'Browser authentication failed: {}'.format(stderr_text or 'Google Cloud SDK returned a non-zero exit code.'),
-                level=Qgis.Critical)
+            message = 'Browser authentication failed: {}'.format(
+                stderr_text or 'Google Cloud SDK returned a non-zero exit code.')
+            if self.iface is not None and hasattr(self.iface, 'messageBar'):
+                self.iface.messageBar().pushMessage('BigQuery Layers', message, level=Qgis.Critical)
+            else:
+                QgsMessageLog.logMessage(message, 'BigQuery Layers', Qgis.Critical)
             return False
         except FileNotFoundError:
-            self.iface.messageBar().pushMessage(
-                'BigQuery Layers',
-                'Google Cloud SDK (`gcloud`) is not installed. Install it or configure Google Application Default Credentials.',
-                level=Qgis.Critical)
+            message = 'Google Cloud SDK (`gcloud`) is not installed. Install it or configure Google Application Default Credentials.'
+            if self.iface is not None and hasattr(self.iface, 'messageBar'):
+                self.iface.messageBar().pushMessage('BigQuery Layers', message, level=Qgis.Critical)
+            else:
+                QgsMessageLog.logMessage(message, 'BigQuery Layers', Qgis.Critical)
             return False
 
     def __init__(self, parent=None, iface=None):

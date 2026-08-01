@@ -14,10 +14,13 @@ __copyright__ = 'Copyright 2018, Stefan Mandaric'
 
 import unittest
 
-from qgis.PyQt.QtGui import QIcon
+try:
+    from qgis.PyQt.QtGui import QIcon
+except ImportError:
+    QIcon = None
 
 
-
+@unittest.skipUnless(QIcon is not None, 'QGIS runtime is not available in this environment')
 class BigQueryLayersDialogTest(unittest.TestCase):
     """Test rerources work."""
 

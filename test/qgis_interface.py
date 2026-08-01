@@ -26,7 +26,16 @@ __copyright__ = (
 import logging
 from qgis.PyQt.QtCore import QObject, pyqtSlot, pyqtSignal
 from qgis.core import QgsProject
-from qgis.gui import QgsMapCanvasLayer
+
+try:
+    from qgis.gui import QgsMapCanvasLayer
+except ImportError:
+    class QgsMapCanvasLayer(object):
+        """Fallback shim for environments where the canvas-layer type is absent."""
+
+        def __init__(self, layer=None):
+            self.layer = layer
+
 LOGGER = logging.getLogger('QGIS')
 
 
