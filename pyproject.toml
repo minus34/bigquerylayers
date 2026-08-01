@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=80", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bigquerylayers"
+version = "0.3.0"
+description = "QGIS plugin for importing data from BigQuery"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "google-cloud-bigquery>=3.42.3,<4",
+  "google-auth>=2.56.2,<3",
+  "google-api-core>=2.33.0,<3",
+  "google-cloud-core>=2.6.0,<3",
+  "google-resumable-media>=2.10.0,<3",
+  "requests>=2.32.4,<3",
+  "urllib3>=2.4.0,<3",
+  "protobuf>=5.29.5,<7",
+  "six>=1.17.0,<2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.4.0"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["test"]

@@ -1,0 +1,13 @@
+# Runtime dependencies for the bundled BigQuery client stack.
+# These constraints are intentionally kept broad enough to work with the
+# QGIS 4.x Python runtime while tracking current upstream releases.
+
+google-cloud-bigquery>=3.42.3,<4
+google-auth>=2.56.2,<3
+google-api-core>=2.33.0,<3
+google-cloud-core>=2.6.0,<3
+google-resumable-media>=2.10.0,<3
+requests>=2.32.4,<3
+urllib3>=2.4.0,<3
+protobuf>=5.29.5,<7
+six>=1.17.0,<2
