@@ -45,8 +45,7 @@ QGIS_PYTHON="/Applications/QGIS-final-4_2_0.app/Contents/MacOS/python"
 export PATH="/Applications/QGIS-final-4_2_0.app/Contents/Frameworks/bin:$PATH"
 
 # restart terminal and run
-
 conda activate qgis4_dev
+export PATH="/Users/hughsaalmans/miniconda3/envs/qgis4_dev/lib/python3.12/site-packages/PySide6/Qt/libexec:$PATH"
 cd /Users/hughsaalmans/git/minus34/bigquerylayers
 pb_tool compile
-

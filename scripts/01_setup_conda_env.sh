@@ -33,14 +33,9 @@ conda config --env --set channel_priority strict
 # reactivate for env vars to take effect
 conda activate ${ENV_NAME}
 
-# install QGIS -- not 4.x
-# conda install -c conda-forge qgis
-
 # install packages
-pip install --upgrade pip
-pip install setuptools
-pip install PyQt6
-pip install PySide6 pyqt6-tools pb_tool ptvsd debugpy pytest
+python -m pip install --upgrade pip setuptools wheel
+pip install PyQt6 qt6-tools PySide6 pb_tool ptvsd debugpy pytest
 
 # clear cache (builds over time)
 conda clean -y --all
