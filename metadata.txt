@@ -14,7 +14,7 @@ version=0.3.0
 author=Stefan Mandaric
 email=stefan.mandaric@gmail.com
 
-about=BigQuery Layers is a plugin for importing data from BigQuery as layers in QGIS. BigQuery is a serverless data warehouse with geospatial support that is part of Google Cloud Platform. The plugin allows the user to run SQL queries and import the results as vector layers. The user must set up a Google Cloud project in the console via https://console.cloud.google.com and authenticate the client as described in the plugin homepage. 
+about=BigQuery Layers is a plugin for importing data from BigQuery as layers in QGIS. BigQuery is a serverless data warehouse with geospatial support that is part of Google Cloud Platform. The plugin allows the user to run SQL queries and import the results as vector layers. The user must set up a Google Cloud project in the console via https://console.cloud.google.com and authenticate the client as described in the plugin homepage. This release is aligned with Python 3.12-compatible bundled runtime support.
 
 tracker=https://github.com/smandaric/bigquerylayers/issues
 repository=https://github.com/smandaric/bigquerylayers
