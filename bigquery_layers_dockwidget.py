@@ -43,6 +43,54 @@ class BigQueryLayersDockWidget(QDockWidget, FORM_CLASS):
 
     closingPlugin = pyqtSignal()
 
+    def _build_bigquery_client(self, project_name):
+        """Create a BigQuery client, with a browser-driven ADC fallback.
+
+        The plugin first tries the default Google Cloud credential discovery
+        path. If that is unavailable, it invokes the Google Cloud SDK's
+        browser-based application-default login flow so the user can complete
+        authentication in their browser while keeping QGIS 4 compatibility.
+        """
+        try:
+            return bigquery.Client(project_name)
+        except Exception as exc:
+            if self._authenticate_with_browser():
+                try:
+                    return bigquery.Client(project_name)
+                except Exception:
+                    raise exc
+            raise
+
+    def _authenticate_with_browser(self):
+        """Launch the Google Cloud SDK browser login flow for ADC."""
+        try:
+            self.iface.messageBar().pushMessage(
+                'BigQuery Layers',
+                'Opening browser-based Google Cloud authentication. Complete the browser flow and retry the query.',
+                level=Qgis.Info)
+            completed = subprocess.run(
+                ['gcloud', 'auth', 'application-default', 'login', '--launch-browser'],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                check=False)
+
+            if completed.returncode == 0:
+                return True
+
+            stderr_text = (completed.stderr or completed.stdout or '').strip()
+            self.iface.messageBar().pushMessage(
+                'BigQuery Layers',
+                'Browser authentication failed: {}'.format(stderr_text or 'Google Cloud SDK returned a non-zero exit code.'),
+                level=Qgis.Critical)
+            return False
+        except FileNotFoundError:
+            self.iface.messageBar().pushMessage(
+                'BigQuery Layers',
+                'Google Cloud SDK (`gcloud`) is not installed. Install it or configure Google Application Default Credentials.',
+                level=Qgis.Critical)
+            return False
+
     def __init__(self, parent=None, iface=None):
         """Constructor."""
         super(BigQueryLayersDockWidget, self).__init__(parent)
@@ -98,7 +146,7 @@ class BigQueryLayersDockWidget(QDockWidget, FORM_CLASS):
         QgsMessageLog.logMessage('Running base query', 'BigQuery Layers', Qgis.Info)
         project_name = self.project_edit.text()
         query = self.query_edit.toPlainText()
-        self.client = bigquery.Client(project_name)
+        self.client = self._build_bigquery_client(project_name)
 
         self.base_query_job = Queue()
         self.base_query_job.put(self.client.query(query))
