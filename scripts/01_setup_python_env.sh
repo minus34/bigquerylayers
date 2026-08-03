@@ -12,8 +12,13 @@ conda deactivate
 
 cd $REPO_FOLDER
 
-export PYTHONHOME="/Applications/QGIS-final-4_2_0.app/Contents/MacOS"
-export PYTHONPATH="/Applications/QGIS-final-4_2_0.app/Contents/Resources/python3.12:/Applications/QGIS-final-4_2_0.app/Contents/Resources/python3.12/site-packages"
+
+export QGIS_PREFIX="/Applications/QGIS-final-4_2_0.app/Contents/MacOS"
+export PYTHONHOME=$QGIS_PREFIX
+export PYTHONPATH="$QGIS_PREFIX/../Resources/python3.12"
+export DYLD_FRAMEWORK_PATH="/Applications/QGIS-final-4_2_0.app/Contents/Frameworks"
+
+# export PYTHONPATH="/Applications/QGIS-final-4_2_0.app/Contents/Resources/python3.12:/Applications/QGIS-final-4_2_0.app/Contents/Resources/python3.12/site-packages"
 
 # install pip
 $PYTHON_EXECUTABLE -m ensurepip --default-pip
