@@ -80,7 +80,7 @@ compile:
 	else \
 		echo "QGIS 4 compile note: no Qt resource compiler available (pyside6-rcc)."; \
 	fi
-	@/Applications/QGIS-final-4_2_0.app/Contents/MacOS/python -m compileall __init__.py bigquery_layers.py bigquery_layers_dockwidget.py background_tasks.py
+	@/Applications/QGIS.app/Contents/MacOS/python -m compileall __init__.py bigquery_layers.py bigquery_layers_dockwidget.py background_tasks.py
 
 %.qm : %.ts
 	$(LRELEASE) $<
